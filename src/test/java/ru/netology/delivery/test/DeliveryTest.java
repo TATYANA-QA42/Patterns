@@ -12,8 +12,8 @@ import java.time.Duration;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
+import static ru.netology.delivery.data.DataGenerator.generateDate;
 
 class DeliveryTest {
 
@@ -27,9 +27,9 @@ class DeliveryTest {
     void shouldSuccessfulPlanAndReplanMeeting() {
         val validUser = DataGenerator.Registration.generateUser("ru");
         val daysToAddForFirstMeeting = 4;
-        val firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
-        val daysToAddForSecondMeeting = 10;
-        val secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
+        val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
+        val daysToAddForSecondMeeting = 5;
+        val secondMeetingDate = generateDate(daysToAddForSecondMeeting);
         $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
@@ -41,7 +41,55 @@ class DeliveryTest {
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(secondMeetingDate);
         $(withText("Запланировать")).click();
-        $("[data-test-id='replan-notification']").click();
+        $$("button").find(exactText("Перепланировать")).click();
         $(withText("Успешно!")).shouldHave(exactText("Успешно!"));
+    }
+
+    @Test
+    @DisplayName("Should successful plan and replan meeting")
+    void shouldSuccessfulPlanMeeting() {
+        val validUser = DataGenerator.Registration.generateUser("ru");
+        $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
+        $("[data-test-id='name'] [type='text']").setValue(validUser.getName());
+        $("[name='phone']").setValue(validUser.getPhone());
+        $("[data-test-id='agreement']").click();
+        $(withText("Запланировать")).click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    @DisplayName("Should successful plan and replan meeting")
+    void numberPhone() {
+        val validUser = DataGenerator.Registration.generateUser("ru");
+        val daysToAddForFirstMeeting = 4;
+        val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
+        //val daysToAddForSecondMeeting = 10;
+        //val secondMeetingDate = generateDate(daysToAddForSecondMeeting);
+        $("[data-test-id='city'] [placeholder='Город']").setValue("Оренбург");
+        $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
+        $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
+        $("[data-test-id='name'] [type='text']").setValue("Дмтирий");
+        $("[name='phone']").setValue("+79225410");
+        $("[data-test-id='agreement']").click();
+        $(withText("Запланировать")).click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    @DisplayName("Should successful plan and replan meeting")
+    void errorCity() {
+        val validUser = DataGenerator.Registration.generateUser("ru");
+        val daysToAddForFirstMeeting = 4;
+        val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
+        //val daysToAddForSecondMeeting = 10;
+        //val secondMeetingDate = generateDate(daysToAddForSecondMeeting);
+        $("[data-test-id='city'] [placeholder='Город']").setValue("Магнитогорск");
+        $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
+        $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
+        $("[data-test-id='name'] [type='text']").setValue("Дмтирий");
+        $("[name='phone']").setValue("+79225410755");
+        $("[data-test-id='agreement']").click();
+        $(withText("Запланировать")).click();
+        $(withText("Доставка в выбранный город недоступна")).shouldBe(visible, Duration.ofSeconds(15));
     }
 }
