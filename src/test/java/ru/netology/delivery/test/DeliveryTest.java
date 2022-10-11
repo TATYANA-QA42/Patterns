@@ -1,5 +1,6 @@
 package ru.netology.delivery.test;
 
+import com.codeborne.selenide.Condition;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,24 +39,14 @@ class DeliveryTest {
         $("[data-test-id='agreement']").click();
         $(withText("Запланировать")).click();
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[class='notification__content']").shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(secondMeetingDate);
         $(withText("Запланировать")).click();
         $$("button").find(exactText("Перепланировать")).click();
-        $(withText("Успешно!")).shouldHave(exactText("Успешно!"));
+        $("[class='notification__content']").shouldHave(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
 
-    @Test
-    @DisplayName("Should successful plan and replan meeting")
-    void shouldSuccessfulPlanMeeting() {
-        val validUser = DataGenerator.Registration.generateUser("ru");
-        $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
-        $("[data-test-id='name'] [type='text']").setValue(validUser.getName());
-        $("[name='phone']").setValue(validUser.getPhone());
-        $("[data-test-id='agreement']").click();
-        $(withText("Запланировать")).click();
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-    }
 
     @Test
     @DisplayName("Should successful plan and replan meeting")
@@ -63,12 +54,10 @@ class DeliveryTest {
         val validUser = DataGenerator.Registration.generateUser("ru");
         val daysToAddForFirstMeeting = 4;
         val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
-        //val daysToAddForSecondMeeting = 10;
-        //val secondMeetingDate = generateDate(daysToAddForSecondMeeting);
-        $("[data-test-id='city'] [placeholder='Город']").setValue("Оренбург");
+        $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
-        $("[data-test-id='name'] [type='text']").setValue("Дмтирий");
+        $("[data-test-id='name'] [type='text']").setValue(validUser.getName());
         $("[name='phone']").setValue("+79225410");
         $("[data-test-id='agreement']").click();
         $(withText("Запланировать")).click();
@@ -78,12 +67,10 @@ class DeliveryTest {
     @Test
     @DisplayName("Should successful plan and replan meeting")
     void errorCity() {
-        val validUser = DataGenerator.Registration.generateUser("ru");
+        val validUser = DataGenerator.Registration.generateUser2("ru");
         val daysToAddForFirstMeeting = 4;
         val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
-        //val daysToAddForSecondMeeting = 10;
-        //val secondMeetingDate = generateDate(daysToAddForSecondMeeting);
-        $("[data-test-id='city'] [placeholder='Город']").setValue("Магнитогорск");
+        $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
         $("[data-test-id='name'] [type='text']").setValue("Дмтирий");
