@@ -73,8 +73,8 @@ class DeliveryTest {
         $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
-        $("[data-test-id='name'] [type='text']").setValue("Дмтирий");
-        $("[name='phone']").setValue("+79225410755");
+        $("[data-test-id='name'] [type='text']").setValue(validUser.getName());
+        $("[name='phone']").setValue(validUser.getPhone());
         $("[data-test-id='agreement']").click();
         $(withText("Запланировать")).click();
         $(withText("Доставка в выбранный город недоступна")).shouldBe(visible, Duration.ofSeconds(15));

@@ -24,7 +24,8 @@ public class DataGenerator {
     public static String generateCity() {
         return faker.address().city();
     }
-    public static String generateCityErr () {
+
+    public static String generateCityErr() {
         String cities[] = {"Норильск", "Магнитогорск"};
         return cities[new Random().nextInt(cities.length)];
     }
@@ -43,18 +44,19 @@ public class DataGenerator {
         }
 
         public static UserInfo generateUser(String locale) {
-        return new UserInfo(generateCity(), generateName(), generatePhone());
-    }
+            return new UserInfo(generateCity(), generateName(), generatePhone());
+        }
 
-    public static UserInfo generateUser2(String locale) {
-        return new UserInfo(generateCityErr(), generateName(), generatePhone());
-    }
+        public static UserInfo generateUser2(String locale) {
+            return new UserInfo(generateCityErr(), generateName(), generatePhone());
+        }
 
 
-    @Value
-    public static class UserInfo {
-        String city;
-        String name;
-        String phone;
+        @Value
+        public static class UserInfo {
+            String city;
+            String name;
+            String phone;
+        }
     }
-}}
+}
