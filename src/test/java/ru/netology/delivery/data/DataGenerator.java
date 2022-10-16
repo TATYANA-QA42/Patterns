@@ -38,6 +38,7 @@ public class DataGenerator {
     public static String generatePhone() {
         return faker.phoneNumber().phoneNumber();
     }
+
     public static String generateErrorPhone() {
         return faker.numerify("+7######");
     }
@@ -54,6 +55,7 @@ public class DataGenerator {
         public static UserInfo generateUser2(String locale) {
             return new UserInfo(generateCityErr(), generateName(), generatePhone());
         }
+
         public static UserInfo generateUser3(String locale) {
             return new UserInfo(generateCity(), generateName(), generateErrorPhone());
         }
