@@ -22,7 +22,8 @@ public class DataGenerator {
     }
 
     public static String generateCity() {
-        return faker.address().city();
+        String cities[] = {"Москва", "Оренбург", "Челябинск", "Иваново", "Магас", "Уфа", "Махачкала", "Владикавказ"};
+        return cities[new Random().nextInt(cities.length)];
     }
 
     public static String generateCityErr() {
@@ -37,6 +38,9 @@ public class DataGenerator {
     public static String generatePhone() {
         return faker.phoneNumber().phoneNumber();
     }
+    public static String generateErrorPhone() {
+        return faker.numerify("+7######");
+    }
 
     public static class Registration {
         private Registration() {
@@ -50,7 +54,9 @@ public class DataGenerator {
         public static UserInfo generateUser2(String locale) {
             return new UserInfo(generateCityErr(), generateName(), generatePhone());
         }
-
+        public static UserInfo generateUser3(String locale) {
+            return new UserInfo(generateCity(), generateName(), generateErrorPhone());
+        }
 
         @Value
         public static class UserInfo {

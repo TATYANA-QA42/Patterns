@@ -51,14 +51,14 @@ class DeliveryTest {
     @Test
     @DisplayName("Should successful plan and replan meeting")
     void numberPhone() {
-        val validUser = DataGenerator.Registration.generateUser("ru");
+        val validUser = DataGenerator.Registration.generateUser3("ru");
         val daysToAddForFirstMeeting = 4;
         val firstMeetingDate = generateDate(daysToAddForFirstMeeting);
         $("[data-test-id='city'] [placeholder='Город']").setValue(validUser.getCity());
         $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.DELETE);
         $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(firstMeetingDate);
         $("[data-test-id='name'] [type='text']").setValue(validUser.getName());
-        $("[name='phone']").setValue("+79225410");
+        $("[name='phone']").setValue(validUser.getPhone());
         $("[data-test-id='agreement']").click();
         $(withText("Запланировать")).click();
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
